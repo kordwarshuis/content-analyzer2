@@ -16,7 +16,8 @@
         <h1>Option 2. paste text</h1>
         <p>Copy text from a webpage, a Worddoc, an E-book etc.</p>
         <textarea id="pastedText" name="pastedText" rows="5" cols="33" class="w-100 p-3"></textarea>
-        <button @click="preparePastedText" class="btn btn-light border m-3">Analyse this!</button>
+        <!-- <button @click="preparePastedText" class="btn btn-light border m-3">Analyse this!</button> -->
+        <button @click="getURLparameters" class="btn btn-light border m-3">Analyse this!</button>
         <hr>
         <button class="btn btn-light mr-3 border" @click="this.clear">Clear</button>
         <button disabled @click="downloadAnalysis('analysis.txt', 'text/plain');" class="btn btn-light border m-3 downloadAnalysis">Download Analysis (testing)</button>
@@ -293,16 +294,9 @@ export default {
             windowLocationOrigin: window.location.origin,
             fileName: "",
 
-
             searchStrings: {},
             searchStringsHighestCount: {},
             index: {},
-
-
-
-
-
-
 
             numberOfPages: 0,
             numberOfWords: 0,
@@ -338,9 +332,6 @@ export default {
             sourceURL: ""
             // end loadingscreen
 
-
-
-
         };
     },
     mounted() {
@@ -349,7 +340,7 @@ export default {
         //     // pdfjsLib.getDocument();
         // });
         this.defineLoadingScreen();
-        this.getURLparameters();
+        // this.getURLparameters();
     },
     methods: {
         defineLoadingScreen() {
@@ -385,53 +376,6 @@ export default {
             this.searchStringsHighestCount[a] = Math.max.apply(Math, this.searchStrings[a].map(function (o) {
                 return o.count;
             }));
-        },
-        // not used
-        wordCloud: function (theWords) {
-            var arrWords = theWords.split(" ");
-            var layout = cloud()
-                .size([500, 500])
-                .words(arrWords.map(function (d) {
-                    return {
-                        text: d,
-                        size: 10 + Math.random() * 90,
-                        test: "haha"
-                    };
-                }))
-                .padding(5)
-                .rotate(function () {
-                    return ~~(Math.random() * 2) * 90;
-                })
-                .font("Impact")
-                .fontSize(function (d) {
-                    return d.size;
-                })
-                .on("end", draw);
-
-            layout.start();
-
-            function draw(words) { // not used
-                d3.select("body").append("svg")
-                    .attr("width", layout.size()[0])
-                    .attr("height", layout.size()[1])
-                    .append("g")
-                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                    .selectAll("text")
-                    .data(words)
-
-                    .enter().append("text")
-                    .style("font-size", function (d) {
-                        return d.size + "px";
-                    })
-                    .style("font-family", "Impact")
-                    .attr("text-anchor", "middle")
-                    .attr("transform", function (d) {
-                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                    })
-                    .text(function (d) {
-                        return d.text;
-                    });
-            }
         },
         getSearchStringInArray(a) {
             // make array from what is in the text field (which may be populated with what is in localStorage). Cannot be used in mounted(), that is too early.
@@ -599,21 +543,30 @@ export default {
         fetchTermsAndKeys(url) {
             // https://stackoverflow.com/a/60785568
             d3.dsv(" ", url).then((termsAndKeys) => {
-                console.log('termsAndKeys: ', termsAndKeys);
                 this.loopThroughTerms(termsAndKeys);
             });
         },
-        loopThroughTerms(data) {
+        loopThroughTerms(termsAndKeys) {
+            var that = this;
 
-            for (let i = 0; i < data.length; i++) {
-                // data[i];
-                console.log('data[i]: ', data[i]);
-                this.createIndex(string, targetKey)
+            // put text from text area into var
+            this.textThatNeedsToBeAnalysed = document.querySelector("#pastedText").value;
+
+            // remove line breaks
+            that.textThatNeedsToBeAnalysed = that.textThatNeedsToBeAnalysed.replace(/(\r\n|\n|\r)/gm, "");
+
+            console.log('termsAndKeys.length: ', termsAndKeys.length);
+            for (let i = 0; i < termsAndKeys.length; i++) {
+
+                console.log('termsAndKeys[i]: ', termsAndKeys[i].Term);
+                that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1; // true
+                console.log('that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1: ', that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1);
+
             }
 
-            for (let i = 0; i < that.getSearchStringInArray("defaultSearchStrings").length; i++) {
-                that.countSpecificStrings(that.getSearchStringInArray("defaultSearchStrings")[i], "defaultSearchStrings");
-            }
+            // for (let i = 0; i < that.getSearchStringInArray("defaultSearchStrings").length; i++) {
+            //     that.countSpecificStrings(that.getSearchStringInArray("defaultSearchStrings")[i], "defaultSearchStrings");
+            // }
 
         }
 

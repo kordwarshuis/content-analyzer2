@@ -22,18 +22,22 @@
                 <h2 class="mt-5">Output</h2>
 
                 <!-- test1 -->
-                <table class="text-start table table-striped">
+                <h3>CSV, select and copy</h3>
+                <textarea name="" id="" cols="30" rows="10" v-html="textAreaString"></textarea>
+
+                <h3>In tableform</h3>
+                <table class="text-start table table-striped table-bordered table-responsive">
                     <thead>
                         <tr>
-                            <th scope="col">Term</th>
                             <th scope="col">Key</th>
+                            <th scope="col">Term</th>
                             <th scope="col">Freq.</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="" v-for="entry in keysAndTermsAndFrequency">
-                            <td>{{ entry.term }}: </td>
                             <td>{{ entry.key }}</td>
+                            <td>{{ entry.term }}: </td>
                             <td>{{ entry.freq }}</td>
                         </tr>
                     </tbody>
@@ -63,7 +67,7 @@ export default {
             windowLocationOrigin: window.location.origin,
             fileName: "",
             keysAndTermsAndFrequency: [],
-
+            textAreaString: "",
             textThatNeedsToBeAnalysed: "",
             urls: "–––",
             progressIndicator: "",
@@ -173,6 +177,8 @@ export default {
                     "key": termsAndKeys[i].Key,
                     "freq": count
                 });
+
+                that.textAreaString += termsAndKeys[i].Term + "," + termsAndKeys[i].Key + "," + count;
 
             }
             that.turnLoadingScreenOff();

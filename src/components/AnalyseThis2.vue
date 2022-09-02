@@ -552,6 +552,11 @@ export default {
             this.textThatNeedsToBeAnalysed = document.querySelector("#pastedText").value;
 
         },
+        removeLineBreaks(str) { 
+            // remove line breaks
+            str = str.replace(/(\r\n|\n|\r)/gm, "");
+
+        },
         loopThroughTerms(termsAndKeys) {
             var that = this;
 
@@ -560,7 +565,7 @@ export default {
 
 
             // remove line breaks
-            that.textThatNeedsToBeAnalysed = that.textThatNeedsToBeAnalysed.replace(/(\r\n|\n|\r)/gm, "");
+            that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
 
             console.log('termsAndKeys.length: ', termsAndKeys.length);
             for (let i = 0; i < termsAndKeys.length; i++) {

@@ -135,25 +135,6 @@ export default {
             // remove line breaks, https://stackoverflow.com/a/10805198
             str = str.replace(/(\r\n|\n|\r)/gm, "");
         },
-        findInObject(terms, term) {
-            var that = this;
-            console.log('terms: ', terms);
-            // terms.filter(obj => {
-            //     if (term === obj.Term && obj.Term !== "") {
-            //         // console.log('k: ', k);
-            //         console.log('term: ', term);
-            //         console.log('obj.Term: ', obj.Term);
-            //         // console.log("-----");
-            //         // console.log("Key is " + k + ", value is: " + obj.Term);
-            //         // console.log("=====");
-            //         that.keysAndTermsAndFrequency.push({
-            //             "term": obj.Term,
-            //             "key": obj.Key
-            //         });
-            //     }
-            // })
-
-        },
         loopThroughTerms(termsAndKeys) {
             var that = this;
 
@@ -161,17 +142,9 @@ export default {
 
             that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
 
-            // console.log('termsAndKeys.length: ', termsAndKeys);
-            // the keys start with 1
             for (let i = 0; i < termsAndKeys.length; i++) {
-                // if (that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1 && termsAndKeys[i].Term !== "") {
-                //     // console.log("hitxxx");
-                //     // console.log('termsAndKeys[i].Term: ', termsAndKeys[i].Term);
-                //     that.findInObject(termsAndKeys, termsAndKeys[i].Term);
-                // }
-
+                // https://stackabuse.com/javascript-how-to-count-the-number-of-substring-occurrences-in-a-string/ :
                 let count = that.textThatNeedsToBeAnalysed.split(termsAndKeys[i].Term).length - 1;
-                console.log(count); // 3
                 that.keysAndTermsAndFrequency.push({
                     "term": termsAndKeys[i].Term,
                     "key": termsAndKeys[i].Key,
@@ -179,11 +152,9 @@ export default {
                 });
 
                 that.textAreaString += termsAndKeys[i].Term + "," + termsAndKeys[i].Key + "," + count;
-
             }
             that.turnLoadingScreenOff();
         }
-
     }
 };
 </script>

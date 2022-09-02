@@ -297,6 +297,7 @@ export default {
             searchStrings: {},
             searchStringsHighestCount: {},
             index: {},
+            keysAndFrequency: {}, 
 
             numberOfPages: 0,
             numberOfWords: 0,
@@ -546,11 +547,17 @@ export default {
                 this.loopThroughTerms(termsAndKeys);
             });
         },
+        getTextThatNeedsToBeAnalysedFromTextArea() { 
+            // put text from text area into var
+            this.textThatNeedsToBeAnalysed = document.querySelector("#pastedText").value;
+
+        },
         loopThroughTerms(termsAndKeys) {
             var that = this;
 
             // put text from text area into var
-            this.textThatNeedsToBeAnalysed = document.querySelector("#pastedText").value;
+            that.getTextThatNeedsToBeAnalysedFromTextArea();
+
 
             // remove line breaks
             that.textThatNeedsToBeAnalysed = that.textThatNeedsToBeAnalysed.replace(/(\r\n|\n|\r)/gm, "");

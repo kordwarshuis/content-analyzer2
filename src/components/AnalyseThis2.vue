@@ -553,7 +553,7 @@ export default {
 
         },
         removeLineBreaks(str) { 
-            // remove line breaks
+            // remove line breaks, https://stackoverflow.com/a/10805198
             str = str.replace(/(\r\n|\n|\r)/gm, "");
 
         },
@@ -562,8 +562,6 @@ export default {
 
             that.getTextThatNeedsToBeAnalysedFromTextArea();
 
-
-            // remove line breaks, https://stackoverflow.com/a/10805198
             that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
 
             console.log('termsAndKeys.length: ', termsAndKeys.length);

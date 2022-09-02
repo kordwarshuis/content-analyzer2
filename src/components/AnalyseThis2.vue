@@ -22,11 +22,21 @@
                 <h2 class="mt-5">Output</h2>
 
                 <!-- test1 -->
-                <table class="text-start table-primary table-striped">
-                    <tr class="" v-for="entry in keysAndTermsAndFrequency">
-                        <td v-bind:style="{ fontSize: 20 + 'px' }" class="p-0">{{ entry.term }}: </td>
-                        <td>{{ entry.key }}</td>
-                    </tr>
+                <table class="text-start table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Term</th>
+                            <th scope="col">Key</th>
+                            <th scope="col">Freq.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="" v-for="entry in keysAndTermsAndFrequency">
+                            <td>{{ entry.term }}: </td>
+                            <td>{{ entry.key }}</td>
+                            <td>{{ entry.freq }}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -74,7 +84,6 @@ export default {
             this.downloadAnalysisButton = document.querySelector(".downloadAnalysis");
         },
         turnLoadingScreenOff() {
-            this.downloadAnalysisButton.disabled = false;
             this.loadingScreen.classList.remove("loading");
             this.results.style.display = "block";
         },
@@ -125,22 +134,21 @@ export default {
         findInObject(terms, term) {
             var that = this;
             console.log('terms: ', terms);
-            for (var k in terms) {
-                if (terms.hasOwnProperty(k)) {
-                    if (term === terms[k].Term) {
-                        console.log('term: ', term);
-                        console.log('terms[k].Term: ', terms[k].Term);
-                        console.log("-----");
-                        console.log("Key is " + k + ", value is: " + terms[k].Term);
-                        console.log("=====");
-                        that.keysAndTermsAndFrequency.push({
-                            "term": terms[k].Term,
-                            "key": k
-                        });
-                    }
-                }
-            }
-            console.log('that.keysAndTermsAndFrequency: ', that.keysAndTermsAndFrequency);
+            // terms.filter(obj => {
+            //     if (term === obj.Term && obj.Term !== "") {
+            //         // console.log('k: ', k);
+            //         console.log('term: ', term);
+            //         console.log('obj.Term: ', obj.Term);
+            //         // console.log("-----");
+            //         // console.log("Key is " + k + ", value is: " + obj.Term);
+            //         // console.log("=====");
+            //         that.keysAndTermsAndFrequency.push({
+            //             "term": obj.Term,
+            //             "key": obj.Key
+            //         });
+            //     }
+            // })
+
         },
         loopThroughTerms(termsAndKeys) {
             var that = this;
@@ -149,19 +157,22 @@ export default {
 
             that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
 
-            console.log('termsAndKeys.length: ', termsAndKeys);
+            // console.log('termsAndKeys.length: ', termsAndKeys);
             // the keys start with 1
             for (let i = 0; i < termsAndKeys.length; i++) {
+                // if (that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1 && termsAndKeys[i].Term !== "") {
+                //     // console.log("hitxxx");
+                //     // console.log('termsAndKeys[i].Term: ', termsAndKeys[i].Term);
+                //     that.findInObject(termsAndKeys, termsAndKeys[i].Term);
+                // }
 
-                // console.log('termsAndKeys[i]: ', termsAndKeys[i].Term);
-                that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1; // true
-                // console.log('that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1: ', that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1);
-
-                if (that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1 && termsAndKeys[i].Term !== "") {
-                    console.log("hitxxx");
-                    // console.log('termsAndKeys[i].Term: ', termsAndKeys[i].Term);
-                    that.findInObject(termsAndKeys, termsAndKeys[i + 1].Term);
-                }
+                let count = that.textThatNeedsToBeAnalysed.split(termsAndKeys[i].Term).length - 1;
+                console.log(count); // 3
+                that.keysAndTermsAndFrequency.push({
+                    "term": termsAndKeys[i].Term,
+                    "key": termsAndKeys[i].Key,
+                    "freq": count
+                });
 
             }
             that.turnLoadingScreenOff();
@@ -172,6 +183,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style lang="scss" scoped>
 h3 {
     margin: 40px 0 0;

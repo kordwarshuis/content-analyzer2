@@ -13,27 +13,13 @@
         <button @click="getURLparameters" class="btn btn-light border m-3">Analyse this!</button>
         <hr>
         <button class="btn btn-light mr-3 border" @click="this.clear">Clear</button>
-        <button disabled @click="downloadAnalysis('analysis.txt', 'text/plain');" class="btn btn-light border m-3 downloadAnalysis">Download Analysis (testing)</button>
+
         <hr>
     </div>
     <div class="results">
-        <h3 class="summary">This PDF ({{ fileName }}) has {{ this.numberOfPages }} pages, {{ this.numberOfSentences
-                }}
-            sentences and {{ this.numberOfWords }} words.</h3>
         <div class="row mt-3">
             <div class="col-md-12">
-                <h2>Frequent Terms</h2>
-                <p>A list of the most common terms, not based on a predefined blockchain/bitcoin related list.
-                </p>
-                <p class="frequentTerms wordcloud">
-                    <span v-for="item in frequentTerms"><span v-bind:style="{ fontSize: 20 + 'px' }" class="p-0">{{item.word}}&nbsp;&nbsp;</span></span>
-                </p>
-            </div>
-            <div class="col-md-12">
-                <h2 class="mt-5">Configurable searches</h2>
-
-                <h2>A: General Phrases and Words</h2>
-                <p>Predefined text strings exactly measured:</p>
+                <h2 class="mt-5">Output</h2>
 
                 <!-- test1 -->
                 <table class="text-start table-primary table-striped">
@@ -68,14 +54,8 @@ export default {
             fileName: "",
             keysAndTermsAndFrequency: [],
 
-            numberOfPages: 0,
-            numberOfWords: 0,
-            numberOfSentences: 0,
             textThatNeedsToBeAnalysed: "",
             urls: "–––",
-
-            frequentTerms: [],
-
             progressIndicator: "",
 
             loadingScreen: null,
@@ -98,21 +78,11 @@ export default {
             this.loadingScreen.classList.remove("loading");
             this.results.style.display = "block";
         },
-        downloadAnalysis(fileName, contentType) {
-            var a = document.createElement("a");
-            var file = new Blob([this.numberOfPages, ",", this.numberOfWords, ",", this.frequentTerms], {
-                type: contentType
-            });
-            a.href = URL.createObjectURL(file);
-            a.download = fileName;
-            a.click();
-        },
         clear() {
             window.location = window.location;
         },
         fetchDataLocalFile(e) {
             var that = this;
-            var pageNrCounter = 1;
             var file = e.target.files[0];
             this.fileName = e.target.files[0].name;
 

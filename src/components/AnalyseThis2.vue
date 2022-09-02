@@ -560,7 +560,6 @@ export default {
         loopThroughTerms(termsAndKeys) {
             var that = this;
 
-            // put text from text area into var
             that.getTextThatNeedsToBeAnalysedFromTextArea();
 
 

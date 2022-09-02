@@ -1,6 +1,4 @@
 <template>
-<!-- <div class="row d-flex justify-content-center m-5" style="max-width: 1000px;"> -->
-<!-- <div class="analyse container-sm col-md-12"> -->
 <div class="analyse container-sm m-5">
     <h1>
         Text Analyzer (English only)
@@ -37,7 +35,7 @@
                 <h2>A: General Phrases and Words</h2>
                 <p>Predefined text strings exactly measured:</p>
 
-                    <!-- test1 -->
+                <!-- test1 -->
                 <table class="text-start table-primary table-striped">
                     <tr class="" v-for="entry in keysAndTermsAndFrequency">
                         <td v-bind:style="{ fontSize: 20 + 'px' }" class="p-0">{{ entry.term }}: </td>
@@ -62,12 +60,10 @@
 <script>
 import * as d3 from "d3";
 
-
 export default {
     name: "AnalyseThis2",
     data() {
         return {
-            // publicPath: publicPath.publicPath,
             windowLocationOrigin: window.location.origin,
             fileName: "",
             keysAndTermsAndFrequency: [],
@@ -76,22 +72,16 @@ export default {
             numberOfWords: 0,
             numberOfSentences: 0,
             textThatNeedsToBeAnalysed: "",
-            organisations: "–––",
-            people: "–––",
-            sentences: "–––",
             urls: "–––",
-        
+
             frequentTerms: [],
-            frequentTermsHighest: 0,
 
             progressIndicator: "",
-            
+
             loadingScreen: null,
             results: null,
             downloadAnalysisButton: null,
             sourceURL: ""
-            // end loadingscreen
-
         };
     },
     mounted() {
@@ -142,8 +132,6 @@ export default {
         },
         getURLparameters() {
             const parsedUrl = new URL(window.location.href);
-            // const strAllQueryParameters = window.location.search;
-            // const allQueryParameters = new URLSearchParams(strAllQueryParameters);
 
             if (parsedUrl.searchParams.get("source") !== null) {
                 this.sourceURL = parsedUrl.searchParams.get("source");
@@ -159,12 +147,10 @@ export default {
         getTextThatNeedsToBeAnalysedFromTextArea() {
             // put text from text area into var
             this.textThatNeedsToBeAnalysed = document.querySelector("#pastedText").value;
-
         },
         removeLineBreaks(str) {
             // remove line breaks, https://stackoverflow.com/a/10805198
             str = str.replace(/(\r\n|\n|\r)/gm, "");
-
         },
         findInObject(terms, term) {
             var that = this;
@@ -177,7 +163,10 @@ export default {
                         console.log("-----");
                         console.log("Key is " + k + ", value is: " + terms[k].Term);
                         console.log("=====");
-                        that.keysAndTermsAndFrequency.push({"term": terms[k].Term, "key": k});
+                        that.keysAndTermsAndFrequency.push({
+                            "term": terms[k].Term,
+                            "key": k
+                        });
                     }
                 }
             }
@@ -201,7 +190,7 @@ export default {
                 if (that.textThatNeedsToBeAnalysed.indexOf(termsAndKeys[i].Term) !== -1 && termsAndKeys[i].Term !== "") {
                     console.log("hitxxx");
                     // console.log('termsAndKeys[i].Term: ', termsAndKeys[i].Term);
-                    that.findInObject(termsAndKeys, termsAndKeys[i+1].Term);
+                    that.findInObject(termsAndKeys, termsAndKeys[i + 1].Term);
                 }
 
             }

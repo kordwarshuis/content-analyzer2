@@ -292,9 +292,18 @@ export default {
             // publicPath: publicPath.publicPath,
             windowLocationOrigin: window.location.origin,
             fileName: "",
+
+
             searchStrings: {},
             searchStringsHighestCount: {},
             index: {},
+
+
+
+
+
+
+
             numberOfPages: 0,
             numberOfWords: 0,
             numberOfSentences: 0,
@@ -328,6 +337,10 @@ export default {
             downloadAnalysisButton: null,
             sourceURL: ""
             // end loadingscreen
+
+
+
+
         };
     },
     mounted() {
@@ -336,6 +349,7 @@ export default {
         //     // pdfjsLib.getDocument();
         // });
         this.defineLoadingScreen();
+        this.getURLparameters();
     },
     methods: {
         defineLoadingScreen() {
@@ -580,13 +594,13 @@ export default {
             if (parsedUrl.searchParams.get("source") !== null) {
                 this.sourceURL = parsedUrl.searchParams.get("source");
             }
-            this.fetchDataCSV(this.sourceURL);
+            this.fetchTermsAndKeys(this.sourceURL);
         },
-        fetchDataCSV(url) {
+        fetchTermsAndKeys(url) {
             // https://stackoverflow.com/a/60785568
-            d3.dsv(" ", url).then((data) => {
-                console.log('data: ', data);
-                this.loopThroughTerms(data);
+            d3.dsv(" ", url).then((termsAndKeys) => {
+                console.log('termsAndKeys: ', termsAndKeys);
+                this.loopThroughTerms(termsAndKeys);
             });
         },
         loopThroughTerms(data) {

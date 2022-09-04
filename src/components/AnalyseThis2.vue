@@ -16,10 +16,7 @@
 
         <h2 class="mt-5">Step 3: Analyze</h2>
         <button @click="getURLparameters" class="btn btn-light border m-3">Analyse this!</button>
-        <hr>
         <button class="btn btn-light mr-3 border" @click="this.clear">Clear</button>
-
-        <hr>
     </div>
     <div class="results">
         <div class="row mt-3">
@@ -52,13 +49,12 @@
     </div>
     <div class="loader">
         <div class="text-left">
-            <h2 class="text-center">This can take a while, depending on size and structure of the PDF </h2>
+            <h2 class="text-center">This can take a while.</h2>
             {{ this.progressIndicator }}
         </div>
     </div>
     <canvas id="canvas"></canvas>
 </div>
-<!-- </div> -->
 </template>
 
 <script>
@@ -74,12 +70,9 @@ export default {
             outputKeysAndTermsAndFrequencyCreated: false,
             textAreaString: "",
             textThatNeedsToBeAnalysed: "",
-            urls: "–––",
             progressIndicator: "",
-
             loadingScreen: null,
             results: null,
-            downloadAnalysisButton: null,
             sourceURL: ""
         };
     },
@@ -90,7 +83,6 @@ export default {
         defineLoadingScreen() {
             this.loadingScreen = document.querySelector(".loader");
             this.results = document.querySelector(".results");
-            this.downloadAnalysisButton = document.querySelector(".downloadAnalysis");
         },
         turnLoadingScreenOff() {
             this.loadingScreen.classList.remove("loading");

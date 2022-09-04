@@ -35,7 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="" v-for="entry in keysAndTermsAndFrequency">
+                        <tr class="" v-for="entry in outputKeysAndTermsAndFrequency">
                             <td>{{ entry.key }}</td>
                             <td>{{ entry.term }}: </td>
                             <td>{{ entry.freq }}</td>
@@ -66,7 +66,8 @@ export default {
         return {
             windowLocationOrigin: window.location.origin,
             fileName: "",
-            keysAndTermsAndFrequency: [],
+            outputKeysAndTermsAndFrequency: [],
+            outputKeysAndTermsAndFrequencyCreated: false,
             textAreaString: "",
             textThatNeedsToBeAnalysed: "",
             urls: "–––",
@@ -135,24 +136,46 @@ export default {
             // remove line breaks, https://stackoverflow.com/a/10805198
             str = str.replace(/(\r\n|\n|\r)/gm, "");
         },
-        loopThroughTerms(termsAndKeys) {
+        prepareOutputKeysAndTermsAndFrequency(obj) {
+            var that = this;
+
+            for (var k in obj) {
+                if (obj.hasOwnProperty(k)) {
+                    that.outputKeysAndTermsAndFrequency.push({
+                        key: obj[k].Key,
+                        term: obj[k].Term,
+                        freq: 0
+                    });
+                }
+            }
+            that.outputKeysAndTermsAndFrequencyCreated = true;
+        },
+        loopThroughTerms(inputTermsAndKeys) {
             var that = this;
 
             that.getTextThatNeedsToBeAnalysedFromTextArea();
 
             that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
 
-            for (let i = 0; i < termsAndKeys.length; i++) {
-                // https://stackabuse.com/javascript-how-to-count-the-number-of-substring-occurrences-in-a-string/ :
-                let count = that.textThatNeedsToBeAnalysed.split(termsAndKeys[i].Term).length - 1;
-                that.keysAndTermsAndFrequency.push({
-                    "term": termsAndKeys[i].Term,
-                    "key": termsAndKeys[i].Key,
-                    "freq": count
-                });
+            // create array with objects that contain the keys:
+            if (that.outputKeysAndTermsAndFrequencyCreated === false) {
+                that.prepareOutputKeysAndTermsAndFrequency(inputTermsAndKeys);
+            }
+
+            for (let i = 0; i < inputTermsAndKeys.length; i++) {
+                let count = that.textThatNeedsToBeAnalysed.split(inputTermsAndKeys[i].Term).length - 1;
+
+                for (var k in that.outputKeysAndTermsAndFrequency) {
+                    if (that.outputKeysAndTermsAndFrequency.hasOwnProperty(k)) {
+                        if (inputTermsAndKeys[i].Term === that.outputKeysAndTermsAndFrequency[k].term) {
+                            that.outputKeysAndTermsAndFrequency[k].freq += count;
+                        }
+                    }
+                }
 
                 that.textAreaString += termsAndKeys[i].Term + "," + termsAndKeys[i].Key + "," + count;
             }
+
             that.turnLoadingScreenOff();
         }
     }

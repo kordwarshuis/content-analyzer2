@@ -101,7 +101,6 @@ export default {
             fileReader.onload = function () {
                 //Step 4:turn array buffer into typed array
                 var typedarray = new Uint8Array(this.result);
-                // console.log('pdfjsLib: ', pdfjsLib);
                 var loadingTask = pdfjsLib.getDocument(typedarray);
                 that.convertPDF(loadingTask);
             };
@@ -119,7 +118,6 @@ export default {
         },
         getURviaInput() {
             const url = document.querySelector("#keys-and-terms-url").value;
-            // console.log('url: ', url);
             this.fetchTermsAndKeys(url);
         },
 
@@ -127,7 +125,6 @@ export default {
             var that = this;
             // https://stackoverflow.com/a/60785568
             d3.dsv(" ", url).then((termsAndKeys) => {
-                // console.log('termsAndKeys: ', termsAndKeys);
                 that.inputTermsAndKeys = termsAndKeys;
                 that.getTextThatNeedsToBeAnalysedFromTextArea();
             });
@@ -156,7 +153,6 @@ export default {
             that.outputKeysAndTermsAndFrequencyCreated = true;
         },
         loopThroughTerms(inputTermsAndKeys) {
-            console.log('inputTermsAndKeys: ', inputTermsAndKeys);
             var that = this;
 
             that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
@@ -169,8 +165,6 @@ export default {
             that.textAreaString = "";
             for (let i = 0; i < inputTermsAndKeys.length; i++) {
                 let count = that.textThatNeedsToBeAnalysed.split(inputTermsAndKeys[i].Term).length - 1;
-                console.log('inputTermsAndKeys[i].Term: ', inputTermsAndKeys[i].Term);
-                console.log('count: ', count);
 
                 for (var k in that.outputKeysAndTermsAndFrequency) {
                     if (that.outputKeysAndTermsAndFrequency.hasOwnProperty(k)) {

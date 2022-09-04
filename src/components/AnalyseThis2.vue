@@ -141,7 +141,7 @@ export default {
             // remove line breaks, https://stackoverflow.com/a/10805198
             str = str.replace(/(\r\n|\n|\r)/gm, "");
         },
-        prepareOutputKeysAndTermsAndFrequency(obj) {
+        createInitialOutputKeysAndTermsAndFrequency(obj) {
             var that = this;
 
             for (var k in obj) {
@@ -165,7 +165,7 @@ export default {
 
             // create array with objects that contain the keys:
             if (that.outputKeysAndTermsAndFrequencyCreated === false) {
-                that.prepareOutputKeysAndTermsAndFrequency(inputTermsAndKeys);
+                that.createInitialOutputKeysAndTermsAndFrequency(inputTermsAndKeys);
             }
 
             for (let i = 0; i < inputTermsAndKeys.length; i++) {

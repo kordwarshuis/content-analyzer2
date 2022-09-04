@@ -1,13 +1,13 @@
 <template>
 <div class="analyse container-sm m-5">
     <h1>
-        Text Analyzer (English only)
+        Text Analyzer
     </h1>
     <div class=" mb-5">
         <h2 class="mt-5">Step 1. upload enter file with terms and keys</h2>
         <label for="basic-url" class="form-label">Enter url</label>
         <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon3">https://example.com/file/</span>
+            <span class="input-group-text" id="basic-addon3">URL with keys and terms</span>
             <input type="text" class="form-control" id="keys-and-terms-url" aria-describedby="basic-addon3">
         </div>
         <h2 class="mt-5">Step 2. paste text</h2>

@@ -4,12 +4,17 @@
         Text Analyzer (English only)
     </h1>
     <div class=" mb-5">
-        <h1>Option 1. upload PDF</h1>
-        <input class="btn btn-light border m-3" @change="this.fetchDataLocalFile" type="file">
-        <hr>
-        <h1>Option 2. paste text</h1>
+        <h2 class="mt-5">Step 1. upload enter file with terms and keys</h2>
+        <label for="basic-url" class="form-label">Enter url</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon3">https://example.com/file/</span>
+            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+        <h2 class="mt-5">Step 2. paste text</h2>
         <p>Copy text from a webpage, a Worddoc, an E-book etc.</p>
         <textarea id="pastedText" name="pastedText" rows="5" cols="33" class="w-100 p-3"></textarea>
+
+        <h2 class="mt-5">Step 3: Analyze</h2>
         <button @click="getURLparameters" class="btn btn-light border m-3">Analyse this!</button>
         <hr>
         <button class="btn btn-light mr-3 border" @click="this.clear">Clear</button>
@@ -21,7 +26,6 @@
             <div class="col-md-12">
                 <h2 class="mt-5">Output</h2>
 
-                <!-- test1 -->
                 <h3>CSV, select and copy</h3>
                 <textarea name="" id="" cols="30" rows="10" v-html="textAreaString"></textarea>
 

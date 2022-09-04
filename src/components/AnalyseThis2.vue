@@ -8,14 +8,14 @@
         <label for="basic-url" class="form-label">Enter url</label>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon3">https://example.com/file/</span>
-            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+            <input type="text" class="form-control" id="keys-and-terms-url" aria-describedby="basic-addon3">
         </div>
         <h2 class="mt-5">Step 2. paste text</h2>
         <p>Copy text from a webpage, a Worddoc, an E-book etc.</p>
         <textarea id="pastedText" name="pastedText" rows="5" cols="33" class="w-100 p-3"></textarea>
 
         <h2 class="mt-5">Step 3: Analyze</h2>
-        <button @click="getURLparameters" class="btn btn-light border m-3">Analyse this!</button>
+        <button @click="getURviaInput" class="btn btn-light border m-3">Analyse this!</button>
         <button class="btn btn-light mr-3 border" @click="this.clear">Clear</button>
     </div>
     <div class="results">
@@ -66,6 +66,7 @@ export default {
         return {
             windowLocationOrigin: window.location.origin,
             fileName: "",
+            inputTermsAndKeys: [],
             outputKeysAndTermsAndFrequency: [],
             outputKeysAndTermsAndFrequencyCreated: false,
             textAreaString: "",
@@ -77,13 +78,10 @@ export default {
         };
     },
     mounted() {
-        this.defineLoadingScreen();
+        this.loadingScreen = document.querySelector(".loader");
+        this.results = document.querySelector(".results");
     },
     methods: {
-        defineLoadingScreen() {
-            this.loadingScreen = document.querySelector(".loader");
-            this.results = document.querySelector(".results");
-        },
         turnLoadingScreenOff() {
             this.loadingScreen.classList.remove("loading");
             this.results.style.display = "block";
@@ -103,7 +101,7 @@ export default {
             fileReader.onload = function () {
                 //Step 4:turn array buffer into typed array
                 var typedarray = new Uint8Array(this.result);
-                console.log('pdfjsLib: ', pdfjsLib);
+                // console.log('pdfjsLib: ', pdfjsLib);
                 var loadingTask = pdfjsLib.getDocument(typedarray);
                 that.convertPDF(loadingTask);
             };
@@ -111,6 +109,7 @@ export default {
             fileReader.readAsArrayBuffer(file);
         },
         getURLparameters() {
+            // get url with keys and terms from url parameter
             const parsedUrl = new URL(window.location.href);
 
             if (parsedUrl.searchParams.get("source") !== null) {
@@ -118,15 +117,25 @@ export default {
             }
             this.fetchTermsAndKeys(this.sourceURL);
         },
+        getURviaInput() { 
+            const url = document.querySelector("#keys-and-terms-url").value;
+            // console.log('url: ', url);
+            this.fetchTermsAndKeys(url);
+        },
+
         fetchTermsAndKeys(url) {
+            var that = this;
             // https://stackoverflow.com/a/60785568
             d3.dsv(" ", url).then((termsAndKeys) => {
-                this.loopThroughTerms(termsAndKeys);
+                // console.log('termsAndKeys: ', termsAndKeys);
+                that.inputTermsAndKeys = termsAndKeys;
+                that.getTextThatNeedsToBeAnalysedFromTextArea();
             });
         },
         getTextThatNeedsToBeAnalysedFromTextArea() {
             // put text from text area into var
             this.textThatNeedsToBeAnalysed = document.querySelector("#pastedText").value;
+            this.loopThroughTerms(this.inputTermsAndKeys);
         },
         removeLineBreaks(str) {
             // remove line breaks, https://stackoverflow.com/a/10805198
@@ -147,9 +156,10 @@ export default {
             that.outputKeysAndTermsAndFrequencyCreated = true;
         },
         loopThroughTerms(inputTermsAndKeys) {
+            console.log('inputTermsAndKeys: ', inputTermsAndKeys);
             var that = this;
 
-            that.getTextThatNeedsToBeAnalysedFromTextArea();
+            // that.getTextThatNeedsToBeAnalysedFromTextArea();
 
             that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
 
@@ -160,16 +170,18 @@ export default {
 
             for (let i = 0; i < inputTermsAndKeys.length; i++) {
                 let count = that.textThatNeedsToBeAnalysed.split(inputTermsAndKeys[i].Term).length - 1;
+                console.log('inputTermsAndKeys[i].Term: ', inputTermsAndKeys[i].Term);
+                console.log('count: ', count);
 
                 for (var k in that.outputKeysAndTermsAndFrequency) {
                     if (that.outputKeysAndTermsAndFrequency.hasOwnProperty(k)) {
-                        if (inputTermsAndKeys[i].Term === that.outputKeysAndTermsAndFrequency[k].term) {
+                        if (inputTermsAndKeys[i].Key === that.outputKeysAndTermsAndFrequency[k].key) {
                             that.outputKeysAndTermsAndFrequency[k].freq += count;
                         }
                     }
                 }
 
-                that.textAreaString += termsAndKeys[i].Term + "," + termsAndKeys[i].Key + "," + count;
+                // that.textAreaString += termsAndKeys[i].Term + "," + termsAndKeys[i].Key + "," + count;
             }
 
             that.turnLoadingScreenOff();

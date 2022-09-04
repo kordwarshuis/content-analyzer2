@@ -117,7 +117,7 @@ export default {
             }
             this.fetchTermsAndKeys(this.sourceURL);
         },
-        getURviaInput() { 
+        getURviaInput() {
             const url = document.querySelector("#keys-and-terms-url").value;
             // console.log('url: ', url);
             this.fetchTermsAndKeys(url);
@@ -159,8 +159,6 @@ export default {
             console.log('inputTermsAndKeys: ', inputTermsAndKeys);
             var that = this;
 
-            // that.getTextThatNeedsToBeAnalysedFromTextArea();
-
             that.removeLineBreaks(that.textThatNeedsToBeAnalysed);
 
             // create array with objects that contain the keys:
@@ -168,6 +166,7 @@ export default {
                 that.createInitialOutputKeysAndTermsAndFrequency(inputTermsAndKeys);
             }
 
+            that.textAreaString = "";
             for (let i = 0; i < inputTermsAndKeys.length; i++) {
                 let count = that.textThatNeedsToBeAnalysed.split(inputTermsAndKeys[i].Term).length - 1;
                 console.log('inputTermsAndKeys[i].Term: ', inputTermsAndKeys[i].Term);
@@ -180,8 +179,13 @@ export default {
                         }
                     }
                 }
+            }
 
-                // that.textAreaString += termsAndKeys[i].Term + "," + termsAndKeys[i].Key + "," + count;
+            // textarea containing the text that can be copied
+            for (var k in that.outputKeysAndTermsAndFrequency) {
+                if (that.outputKeysAndTermsAndFrequency.hasOwnProperty(k)) {
+                    that.textAreaString += that.outputKeysAndTermsAndFrequency[k].key + "," + that.outputKeysAndTermsAndFrequency[k].term + "," + that.outputKeysAndTermsAndFrequency[k].freq + "\n";
+                }
             }
 
             that.turnLoadingScreenOff();
